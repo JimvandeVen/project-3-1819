@@ -1,0 +1,22 @@
+{
+  "name": "sfs-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon server",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Jiskefet Dev Team",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^4.1.3",
+    "dotenv": "^7.0.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.11",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {}
+}
