@@ -26,8 +26,8 @@ function notifications(req, res) {
 
 let logs = []
 let runManagerLogs = []
-let shifterLogs = []
 let shiftleaderLogs = []
+let shifterLogs = []
 let runManagerCount = 0
 let shiftleaderCount = 0
 let shifterCount = 0
@@ -53,7 +53,7 @@ io.on("connection", function (socket) {
     });
 
     socket.on("newLog", function (socket) {
-        socket.id = logs.length + 1
+        socket.id = logs.length + 100000000
         let log = socket
         console.log(log)
 
@@ -68,9 +68,9 @@ io.on("connection", function (socket) {
             shiftleaderLogs.push(log)
             io.to('shiftleader').emit('newLog', { log: log, count: shiftleaderCount });
 
-            shifterCount++
-            shifterLogs.push(log)
-            io.to('shifter').emit('newLog', { log: log, count: shifterCount });
+            // shifterCount++
+            // shifterLogs.push(log)
+            // io.to('shifter').emit('newLog', { log: log, count: shifterCount });
         } else if (log.tags.includes("error") || log.tags.includes("succes")) {
 
             shiftleaderCount++
@@ -78,9 +78,9 @@ io.on("connection", function (socket) {
 
             io.to('shiftleader').emit('newLog', { log: log, count: shiftleaderCount });
 
-            shifterCount++
-            shifterLogs.push(log)
-            io.to('shifter').emit('newLog', { log: log, count: shifterCount });
+            // shifterCount++
+            // shifterLogs.push(log)
+            // io.to('shifter').emit('newLog', { log: log, count: shifterCount });
         } else {
             runManagerCount++
             runManagerLogs.push(log)
@@ -98,6 +98,44 @@ io.on("connection", function (socket) {
             io.to('shifter').emit('notifications', { logs: shifterLogs, count: shifterCount });
         }
     })
+
+    socket.on("statusChange", async function (change) {
+        console.log(change);
+        let isInManager = runManagerLogs.some(runManagerLog => runManagerLog['id'] == change.logId)
+        let isInLeader = shiftleaderLogs.some(shiftleaderLog => shiftleaderLog['id'] == change.logId)
+        let isInShifter = shifterLogs.some(shifterLog => shifterLog['id'] == change.logId)
+
+        if (isInManager) {
+            await changeStatus(runManagerLogs, change)
+            await moveLog(runManagerLogs, change)
+        } else if (isInLeader) {
+            await changeStatus(shiftleaderLogs, change)
+            await moveLog(shiftleaderLogs, change)
+        } else if (isInShifter) {
+            await changeStatus(shifterLogs, change)
+            await moveLog(shifterLogs, change)
+        }
+    })
+
+    function changeStatus(logs, change) {
+        logs.forEach(log => {
+            if (log.id == change.logId) {
+                log.status = change.status
+            }
+        })
+    }
+
+    function moveLog(logs, change) {
+        logs.forEach(log => {
+            if (log.id == change.logId && log.status == "shifters") {
+                shifterLogs.push(log)
+            } else if (log.id == change.logId && log.status == "manager") {
+                runManagerLogs.push(log)
+            }
+        })
+        let removeIndex = logs.findIndex(log => log.id == change.logId);
+        logs.splice(removeIndex, 1);
+    }
 })
 
 http.listen(process.env.PORT || 3000)

@@ -47,7 +47,7 @@ if (login) {
 
         getNotifications(socket)
         loginSection.classList.add("hide")
-        main.classList.remove("hide")
+        main.classList.add("hide")
 
         // main.innerHTML = `
         // <section class="notificationFeed">
@@ -80,7 +80,8 @@ if (newLogSubmit) {
             title: title,
             tags: tagValues,
             text: text,
-            id: 1
+            id: 1,
+            status: ""
         }
 
         socket.emit("newLog", log)
@@ -108,13 +109,21 @@ socket.on("notifications", function (data) {
 function notificationFeedHandler(logs) {
     if (logs.length > 0) {
         main.innerHTML = logs.map(log => {
-            return `<div class="log">
+            return `<div id="${log.id}"class="log ${log.tags[0]} ${log.status}">
             <h3>${log.title}</h3>
             <form class="logHandleForm">
-                <input type="radio" data-id="${log.id}" id="like:${log.id}" name="likes" value="like">
-                <label for="like:${log.id}">Like</label>
-                <input type="radio" data-id="${log.id}" id="dislike:${log.id}" name="likes" value="dislike">
-                <label for="dislike:${log.id}">Dislike</label>
+                <div>
+                    <input type="radio" data-id="${log.id}" id="archived:${log.id}" name="review" value="archived">
+                    <label for="archived:${log.id}">Reviewed and Archived</label>
+                </div>   
+                <div>
+                    <input type="radio" data-id="${log.id}" id="shifters:${log.id}" name="review" value="shifters">
+                    <label for="shifters:${log.id}">Reviewed and sent back to shifters</label>
+                </div>
+                <div>
+                    <input type="radio" data-id="${log.id}" id="manager:${log.id}" name="review" value="manager">
+                    <label for="manager:${log.id}">Reviewed and sent back to run manager</label>
+                </div> 
             </form>
             <p>${log.text}</p>
         </div>`}).join('')
@@ -124,18 +133,24 @@ function notificationFeedHandler(logs) {
         `
     }
 
-
+    const logHandleForms = document.querySelectorAll(".logHandleForm")
+    logHandleForms.forEach(logHandleForm => {
+        logHandleForm.addEventListener("change", function (e) {
+            reviewHandler(e)
+        })
+    })
 }
 
+function reviewHandler(e) {
+    console.log(e)
 
+    let change = {
+        logId: e.srcElement.dataset.id,
+        status: e.srcElement.value
+    }
+    socket.emit("statusChange", change)
 
-
-// const likeForms = document.querySelectorAll(".likeForm")
-// likeForms.forEach(likeForm => {
-//     likeForm.addEventListener("change", function (e) {
-//         likeHandler(e)
-//     })
-// })
+}
 // removeAnimation()
 
 
