@@ -25,7 +25,12 @@ function notifications(req, res) {
 };
 
 let logs = []
-
+let runManagerLogs = []
+let shifterLogs = []
+let shiftleaderLogs = []
+let runManagerCount = 0
+let shiftleaderCount = 0
+let shifterCount = 0
 
 
 
@@ -48,17 +53,49 @@ io.on("connection", function (socket) {
     });
 
     socket.on("newLog", function (socket) {
+        socket.id = logs.length + 1
         let log = socket
+        console.log(log)
+
         logs.push(log)
         if (log.tags.includes("criticalError") || log.tags.includes("criticalSucces")) {
-            io.to('runManager').emit('log', log);
-            io.to('shiftleader').emit('log', log);
-            io.to('shifter').emit('log', log);
+
+            runManagerCount++
+            runManagerLogs.push(log)
+            io.to('runManager').emit('newLog', { log: log, count: runManagerCount });
+
+            shiftleaderCount++
+            shiftleaderLogs.push(log)
+            io.to('shiftleader').emit('newLog', { log: log, count: shiftleaderCount });
+
+            shifterCount++
+            shifterLogs.push(log)
+            io.to('shifter').emit('newLog', { log: log, count: shifterCount });
         } else if (log.tags.includes("error") || log.tags.includes("succes")) {
-            io.to('shiftleader').emit('log', log);
-            io.to('shifter').emit('log', log);
+
+            shiftleaderCount++
+            shiftleaderLogs.push(log)
+
+            io.to('shiftleader').emit('newLog', { log: log, count: shiftleaderCount });
+
+            shifterCount++
+            shifterLogs.push(log)
+            io.to('shifter').emit('newLog', { log: log, count: shifterCount });
         } else {
-            io.to('runManager').emit('log', log);
+            runManagerCount++
+            runManagerLogs.push(log)
+
+            io.to('runManager').emit('newLog', { log: log, count: runManagerCount });
+        }
+    })
+
+    socket.on("loadNotifications", function (role) {
+        if (role == "runManager") {
+            io.to('runManager').emit('notifications', { logs: runManagerLogs, count: runManagerCount });
+        } else if (role == "shiftleader") {
+            io.to('shiftleader').emit('notifications', { logs: shiftleaderLogs, count: shiftleaderCount });
+        } else {
+            io.to('shifter').emit('notifications', { logs: shifterLogs, count: shifterCount });
         }
     })
 })

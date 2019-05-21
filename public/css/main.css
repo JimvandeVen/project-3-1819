@@ -44,3 +44,17 @@ nav ul li a{
 nav ul li a:visited{
     color: white;
 }
+
+.hide{
+    display: none;
+}
+
+.log{
+    color: black;
+    background-color: white;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.19);
+    border-radius: 10px;
+    padding: .5em;
+    margin-bottom: 1em;
+    animation: expand .2s ease-in-out;
+}
