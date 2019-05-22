@@ -3,13 +3,15 @@
 <section class="loginSection">
     <form class="login">
         <h2>What is your function?</h2>
-        <input type="radio" id="shifter" name="function" value="shifter">
-        <label for="shifter">Shifter</label>
-        <input type="radio" id="shiftleader" name="function" value="shiftleader">
-        <label for="shiftleader">Shiftleader</label>
-        <input type="radio" id="runManager" name="function" value="runManager">
-        <label for="runManager">Run Manager</label>
-        <input type="submit" value="Submit">
+        <div class="inputs">
+            <input type="radio" id="shifter" name="function" value="shifter">
+            <label for="shifter" class="label">Shifter</label>
+            <input type="radio" id="shiftleader" name="function" value="shiftleader">
+            <label for="shiftleader" class="label">Shiftleader</label>
+            <input type="radio" id="runManager" name="function" value="runManager">
+            <label for="runManager" class="label">Run Manager</label>
+        </div>
+        <input type="submit" value="Submit" class="button">
     </form>
 </section>
 <section class="newlogSection hide">
@@ -19,27 +21,23 @@
         <input id="title" type="text" placeholder="Title" class="">
         <p>Add tags:</p>
         <div>
-            <input type="checkbox" id="criticalError" name="criticalError" class="tag" value="criticalError">
-            <label for="criticalError">Critical Error</label>
-        </div>
-        <div>
-            <input type="checkbox" id="error" name="error" value="error" class="tag">
-            <label for="error">Error</label>
-        </div>
-        <div>
-            <input type="checkbox" id="runManager" name="runManager" value="runManager" class="tag">
-            <label for="runManager">Run Manager</label>
-        </div>
-        <div>
-            <input type="checkbox" id="succes" name="succes" value="succes" class="tag">
-            <label for="succes">Succes</label>
-        </div>
-        <div>
-            <input type="checkbox" id="criticalSucces" name="criticalSucces" value="criticalSucces" class="tag">
-            <label for="criticalSucces">Critical Succes</label>
+            <input type="radio" id="criticalError" name="tag" class="tag" value="criticalError">
+            <label class="label" for="criticalError">Critical Error</label>
+
+            <input type="radio" id="error" name="tag" value="error" class="tag">
+            <label class="label" for="error">Error</label>
+
+            <input type="radio" id="succes" name="tag" value="succes" class="tag">
+            <label class="label" for="succes">Succes</label>
+
+            <input type="radio" id="criticalSucces" name="tag" value="criticalSucces" class="tag">
+            <label class="label" for="criticalSucces">Critical Succes</label>
+
+            <input type="radio" id="runManagerTag" name="tag" value="runManager" class="tag">
+            <label class="label" for="runManagerTag">Run Manager</label>
         </div>
         <textarea id="markdown" placeholder="Type your description here" class="text"></textarea>
-        <button type="submit">Submit</button>
+        <button class="button" type="submit">Submit</button>
     </form>
 </section>
 <section class="hide main">

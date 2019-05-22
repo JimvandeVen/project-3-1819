@@ -47,7 +47,7 @@ if (login) {
 
         getNotifications(socket)
         loginSection.classList.add("hide")
-        main.classList.add("hide")
+        main.classList.remove("hide")
 
         // main.innerHTML = `
         // <section class="notificationFeed">
@@ -65,13 +65,13 @@ if (newLogSubmit) {
     newLogSubmit.addEventListener("submit", e => {
         e.preventDefault()
         const title = document.querySelector("#title").value
-        const tagCheckboxes = document.querySelectorAll(".tag")
+        const tagRadios = document.querySelectorAll(".tag")
         const text = document.querySelector(".text").value
         let tagValues = []
 
-        tagCheckboxes.forEach(tagCheckbox => {
-            if (tagCheckbox.checked == true) {
-                tagValues.push(tagCheckbox.value)
+        tagRadios.forEach(tagRadio => {
+            if (tagRadio.checked == true) {
+                tagValues.push(tagRadio.value)
             }
 
         })
@@ -94,7 +94,11 @@ socket.on("newLog", function (data) {
     console.log(log, count)
 
     notificationCount(count)
+})
 
+socket.on("newCount", function (data) {
+    let count = data.count
+    notificationCount(count)
 })
 
 function notificationCount(count) {
@@ -103,29 +107,32 @@ function notificationCount(count) {
 
 socket.on("notifications", function (data) {
     let logs = data.logs
+    let count = data.count
     notificationFeedHandler(logs)
+    notificationCount(count)
 })
 
 function notificationFeedHandler(logs) {
     if (logs.length > 0) {
         main.innerHTML = logs.map(log => {
             return `<div id="${log.id}"class="log ${log.tags[0]} ${log.status}">
-            <h3>${log.title}</h3>
+            <h2>${log.tags[0]}</h2>
             <form class="logHandleForm">
-                <div>
+                <div class="inputs">
                     <input type="radio" data-id="${log.id}" id="archived:${log.id}" name="review" value="archived">
-                    <label for="archived:${log.id}">Reviewed and Archived</label>
-                </div>   
-                <div>
+                    <label class="label" for="archived:${log.id}">Reviewed and Archived</label>
+
+
                     <input type="radio" data-id="${log.id}" id="shifters:${log.id}" name="review" value="shifters">
-                    <label for="shifters:${log.id}">Reviewed and sent back to shifters</label>
-                </div>
-                <div>
+                    <label class="label" for="shifters:${log.id}">Reviewed and sent back to shifters</label>
+
+
                     <input type="radio" data-id="${log.id}" id="manager:${log.id}" name="review" value="manager">
-                    <label for="manager:${log.id}">Reviewed and sent back to run manager</label>
-                </div> 
+                    <label class="label" for="manager:${log.id}">Reviewed and sent back to run manager</label>
+                </div>
             </form>
-            <p>${log.text}</p>
+            <h3>Title: ${log.title}</h3>
+            <p>Log: ${log.text}</p>
         </div>`}).join('')
     } else {
         main.innerHTML = `

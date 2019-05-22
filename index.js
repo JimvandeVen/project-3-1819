@@ -108,12 +108,15 @@ io.on("connection", function (socket) {
         if (isInManager) {
             await changeStatus(runManagerLogs, change)
             await moveLog(runManagerLogs, change)
+            runManagerCount--
         } else if (isInLeader) {
             await changeStatus(shiftleaderLogs, change)
             await moveLog(shiftleaderLogs, change)
+            shiftleaderCount--
         } else if (isInShifter) {
             await changeStatus(shifterLogs, change)
             await moveLog(shifterLogs, change)
+            shifterCount--
         }
     })
 
@@ -129,8 +132,14 @@ io.on("connection", function (socket) {
         logs.forEach(log => {
             if (log.id == change.logId && log.status == "shifters") {
                 shifterLogs.push(log)
+                shifterCount++
+                io.to('shifter').emit('newCount', { count: shifterCount });
             } else if (log.id == change.logId && log.status == "manager") {
                 runManagerLogs.push(log)
+                runManagerCount++
+                io.to('runManager').emit('newCount', { count: runManagerCount });
+            } else if (log.id == change.logId && log.status == "manager") {
+
             }
         })
         let removeIndex = logs.findIndex(log => log.id == change.logId);
