@@ -20,31 +20,20 @@ There are a couple of user stories that I used. Below they are presented from mo
 3. As a user I want a simple but user friendly way to add or change tags so logs and threads are easier to filter/search through.
 
 ## Current State
-[This is the current state](http://cmd.jiskefet.io/) of the application
-![Google.com](google.png)
+[This is the current state](http://cmd.jiskefet.io/) of the application. I thought it missed a lot of design. 
 
-![Bol.com](colorblind.png)
+![currentState](screens/currentState.png)
 
 ## My Solution
-
-
 ### Concept
 
-![wireframes](screens/wireframes.jpeg)
+Apart from the design I think the current application also misses a good system for communication. The data is really cluttered and I coul
+
+
 
 ### Sketches
-
+![wireframes](screens/wireframes.jpeg)
 
 #### Product
-
-
 ![functional](screens/functional.png)
 
-#### Usable
-
-
-![usable](screens/usable.png)
-
-#### Pleasureable
-
-![pleasurable](screens/pleasurable.png)
