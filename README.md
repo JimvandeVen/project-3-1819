@@ -12,6 +12,7 @@ In this assignment from CERN I had three days to come up with a solution to one 
   - [Sketches](#sketches)
   - [Product](#product)
 
+
 ## User Stories
 There are a couple of user stories that I used. Below they are presented from most important to least important concerning my application.
 
@@ -27,13 +28,11 @@ There are a couple of user stories that I used. Below they are presented from mo
 ## My Solution
 ### Concept
 
-Apart from the design I think the current application also misses a good system for communication. The data is really cluttered and I coul
-
-
-
-### Sketches
-![wireframes](screens/wireframes.jpeg)
+Apart from the design I think the current application also misses a good system for communication. The data is really cluttered and I could imagine that not everybody has to see all the notifications all the time. Different people who work there have different functions and stand in different spots in hierarchy. Also if you would work with different kinds of tags for logs, you could make sure that logs  with particular tags are sent to people with particular jobs. This way those people don't get notification overloaded.
 
 #### Product
-![functional](screens/functional.png)
+![Simpel Login](screens/login.png)
 
+![Logs with Tags](screens/newLog.png)
+
+![notifications](screens/notifications.png)
